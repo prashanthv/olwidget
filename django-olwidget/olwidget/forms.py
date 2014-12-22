@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.gis.forms.fields import GeometryField
-
+from django.forms.forms import get_declared_fields
 from olwidget.widgets import Map, BaseVectorLayer, EditableLayer
 from olwidget.fields import MapField
 from olwidget import utils
@@ -54,7 +54,9 @@ class MapModelFormMetaclass(type):
         except NameError:
             # We are defining MapModelForm itself.
             parents = None
-        declared_fields = forms.models.get_declared_fields(bases, attrs, False)
+        #declared_fields = forms.models.get_declared_fields(bases, attrs, False)
+        #Above line fails in django1.7 
+        declared_fields = get_declared_fields(bases, attrs, False)
         new_class = super(MapModelFormMetaclass, mcs).__new__(mcs, name, bases,
                 attrs)
         if not parents:
